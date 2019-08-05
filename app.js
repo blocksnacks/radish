@@ -1,12 +1,10 @@
-require('dotenv');
+require('dotenv').config();
 const express = require('express');
 const expressWs = require('express-ws');
 const radiksServer = require('radiks-server');
 
 const port = process.env.PORT || 1260;
-const mongoDBUrl = process.env.ENV === 'prod'
-  ? process.env.MONGODB_URL_PROD
-  : process.env.MONGODB_URL_DEV;
+const mongoDBUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/radiks-server';
 
 const app = express();
 expressWs(app);
