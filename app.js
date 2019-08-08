@@ -3,6 +3,7 @@ const express = require('express');
 const expressWs = require('express-ws');
 const radiksServer = require('radiks-server');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const mailer = require('./mailer');
 const { CENTRAL_COLLECTION, USER_SETTINGS } = require('./constants');
 
@@ -15,6 +16,7 @@ expressWs(app);
 radiksServer.setup({ mongoDBUrl })
   .then(radiksController => {
     app.use(bodyParser.json());
+    app.use(cors());
 
     app.use('/radiks', radiksController);
 
@@ -27,7 +29,7 @@ radiksServer.setup({ mongoDBUrl })
         || !creator
         || !groupName
       ) {
-        return res.status(400).send('Missing required body keys');
+        return res.status(400).send({ error: 'Missing required body keys' });
       }
       
       return Promise.all(recipients.map(async ({ blockstackId, inviteId }) => {
