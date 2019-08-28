@@ -4,6 +4,7 @@ const expressWs = require('express-ws');
 const radiksServer = require('radiks-server');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
 const mailer = require('./mailer');
 const { CENTRAL_COLLECTION, USER_SETTINGS } = require('./constants');
 
@@ -17,6 +18,11 @@ radiksServer.setup({ mongoDBUrl })
   .then(radiksController => {
     app.use(bodyParser.json());
     app.use(cors());
+
+    app.use(express.static(path.join(__dirname, 'build')));
+    app.get('/', function(_req, res) {
+      res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    });
 
     app.use('/radiks', radiksController);
 
