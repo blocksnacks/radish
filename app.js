@@ -10,6 +10,8 @@ const { CENTRAL_COLLECTION, USER_SETTINGS } = require('./constants');
 
 const port = process.env.PORT || 1260;
 const mongoDBUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/radiks-server';
+console.log(process.env);
+console.log(port, mongoDBUrl);
 
 const app = express();
 expressWs(app);
