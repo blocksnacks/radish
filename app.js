@@ -22,7 +22,7 @@ radiksServer.setup({ mongoDBUrl })
     app.use(cors());
 
     app.use(express.static(path.join(__dirname, 'build')));
-    app.get('/', function(_req, res) {
+    app.get('/', (_req, res) => {
       res.sendFile(path.join(__dirname, 'build', 'index.html'));
     });
 
@@ -39,7 +39,7 @@ radiksServer.setup({ mongoDBUrl })
       ) {
         return res.status(400).send({ error: 'Missing required body keys' });
       }
-      
+
       return Promise.all(recipients.map(async ({ blockstackId, inviteId }) => {
         const db = await radiksServer.getDB();
         const centralCollection = db.collection(CENTRAL_COLLECTION);
@@ -59,6 +59,11 @@ radiksServer.setup({ mongoDBUrl })
           console.error('Error sending emails', err);
           res.sendStatus(500);
         });
+    });
+
+    // Handles any requests that don't match the ones above
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, 'build', 'index.html'));
     });
 
     app.listen(port, (err) => {
